@@ -43,7 +43,7 @@ public class GameManager : MonoBehaviour {
         guiManager.Init( saveLoadManager );
         powerupSpawner = GetComponentInChildren<PowerupSpawner>();
         powerupSpawner.Init( savedData );
-        cameraController.Init( CameraStatus.CAMERA_NO_ROTATION );
+        cameraController.Init();
         styleManager = GetComponentInChildren<StyleManager>();
         styleManager.Init( savedData );
         soundManager = GetComponentInChildren<SoundManager>();
@@ -124,12 +124,12 @@ public class GameManager : MonoBehaviour {
         soundManager.StopMusicLoop();
 
         if ( scoreManager.CheckDailyPlayReward(saveLoadManager) ) {
-            cameraController.Stop(false);
+            cameraController.Stop();
             scoreManager.ClaimDailyPlayReward(saveLoadManager, savedData);
             scoreManager.FinalizeScore(savedData);
             guiManager.ShowGameOverScreen(soundManager, scoreManager.GetCurrentScore(), scoreManager.GetTotalScore(), scoreManager.IsNewHighscore(), true, savedData.IsSomethingPurchaseable());
         } else {
-            cameraController.Stop(false);
+            cameraController.Stop();
             scoreManager.FinalizeScore(savedData);
             guiManager.ShowGameOverScreen(soundManager, scoreManager.GetCurrentScore(), scoreManager.GetTotalScore(), scoreManager.IsNewHighscore(), false, savedData.IsSomethingPurchaseable());
         }

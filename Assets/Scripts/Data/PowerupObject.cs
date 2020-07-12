@@ -32,6 +32,10 @@ public class PowerupObject {
         return currentLevel;
     }
 
+    public void SetCurrentLevel(int value) {
+        currentLevel = value;
+    }
+
     public int GetMaxLevel() {
         return maxLevel;
     }

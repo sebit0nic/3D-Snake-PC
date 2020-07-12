@@ -17,6 +17,8 @@ public class SavedData {
     public PlayerColorTypes currentColor;
 
     private ShopSection currentShopSection;
+    private const int highscoreLength = 3;
+    private const int totalscoreLength = 5;
 
     public SavedData( List<HatObject> standardHatObjects, List<ColorObject> standardColorObjects, List<PowerupObject> standardPowerupObjects ) {
         hatObjectList = standardHatObjects;
@@ -148,67 +150,63 @@ public class SavedData {
         return false;
     }
 
-    /// <summary>
-    /// Return the number of purchaseables bought at the moment so that the achievement progress
-    /// can be updated.
-    /// </summary>
-    public int GetPurchaseableBoughtCount() {
-        int purchaseableBoughtCount = 0;
-        foreach( HatObject hatObject in hatObjectList ) {
-            if( hatObject.IsUnlocked() ) {
-                purchaseableBoughtCount++;
+    public void ParseSavedString(string savedString) {
+        // TODO: implement hat, color, powerup object parsing
+        // Example string: H01;H10;H20;H30;H40;H50;C01;C10;C20;C30;C40;C50;P00;P10;P20;S000;T00000;A0;O0;
+        int index, value;
+        savedString = "H01;H10;H20;H30;H40;H50;C01;C10;C21;C30;C40;C51;P00;P10;P20;S100;T02000;A0;O0;";
+        for (int i = 0; i < savedString.Length; i++) {
+            switch ( savedString[i] ) {
+                case 'H':
+                    i++;
+                    index = int.Parse(savedString[i].ToString());
+                    i++;
+                    value = int.Parse(savedString[i].ToString());
+                    hatObjectList[index].SetUnlocked(value == 1 ? true : false);
+                    i++;
+                    Debug.Log("Added hat at index <" + index + "> and value <" + value + "> now at position <" + i + ">");
+                    break;
+                case 'C':
+                    i++;
+                    index = int.Parse(savedString[i].ToString());
+                    i++;
+                    value = int.Parse(savedString[i].ToString());
+                    colorObjectList[index].SetUnlocked(value == 1 ? true : false);
+                    i++;
+                    Debug.Log("Added color at index <" + index + "> and value <" + value + "> now at position <" + i + ">");
+                    break;
+                case 'P':
+                    i++;
+                    index = int.Parse(savedString[i].ToString());
+                    i++;
+                    value = int.Parse(savedString[i].ToString());
+                    powerupObjectList[index].SetCurrentLevel(value);
+                    Debug.Log("Added color at index <" + index + "> and value <" + value + "> now at position <" + i + ">");
+                    break;
+                case 'S':
+                    i++;
+                    highscore = int.Parse(savedString.Substring(i, highscoreLength));
+                    i += highscoreLength;
+                    Debug.Log("Added highscore <" + highscore + "> now at position <" + i + ">");
+                    break;
+                case 'T':
+                    i++;
+                    totalScore = int.Parse(savedString.Substring(i, totalscoreLength));
+                    i += totalscoreLength;
+                    Debug.Log("Added totalscore <" + totalScore + "> now at position <" + i + ">");
+                    break;
+                case 'A':
+                    i++;
+                    currentHat = (PlayerHatTypes) int.Parse(savedString[i].ToString());
+                    Debug.Log("Added currentHat <" + currentHat.ToString() + "> now at position <" + i + ">");
+                    break;
+                case 'O':
+                    i++;
+                    currentColor = (PlayerColorTypes) int.Parse(savedString[i].ToString());
+                    Debug.Log("Added currentColor <" + currentColor.ToString() + "> now at position <" + i + ">");
+                    break;
             }
         }
-
-        foreach( ColorObject colorObject in colorObjectList ) {
-            if( colorObject.IsUnlocked() ) {
-                purchaseableBoughtCount++;
-            }
-        }
-        
-        foreach( PowerupObject powerupObject in powerupObjectList ) {
-            purchaseableBoughtCount += powerupObject.GetCurrentLevel();
-        }
-        return purchaseableBoughtCount;
-    }
-
-    /// <summary>
-    /// Check if every single purchaseable is bought so that the achievement progress can be updated.
-    /// </summary>
-    public bool IsEverythingUnlocked() {
-        int purchaseableCount = 0;
-        int purchaseableBoughtCount = 0;
-        foreach( HatObject hatObject in hatObjectList ) {
-            purchaseableCount++;
-            if( hatObject.IsUnlocked() ) {
-                purchaseableBoughtCount++;
-            }
-        }
-
-        foreach( ColorObject colorObject in colorObjectList ) {
-            purchaseableCount++;
-            if( colorObject.IsUnlocked() ) {
-                purchaseableBoughtCount++;
-            }
-        }
-
-        foreach( PowerupObject powerupObject in powerupObjectList ) {
-            purchaseableCount += powerupObject.GetMaxLevel();
-            purchaseableBoughtCount += powerupObject.GetCurrentLevel();
-        }
-        return purchaseableCount == purchaseableBoughtCount;
-    }
-
-    /// <summary>
-    /// Check if a powerup is fully unlocked so that the achievement progress can be updated.
-    /// </summary>
-    public bool IsPowerupAtMaxLevel() {
-        foreach( PowerupObject powerupObject in powerupObjectList ) {
-            if( powerupObject.GetCurrentLevel() == powerupObject.GetMaxLevel() ) {
-                return true;
-            }
-        }
-        return false;
     }
 
     public void SetTotalScore( int totalScore ) {

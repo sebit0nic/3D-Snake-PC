@@ -30,6 +30,10 @@ public class ColorObject {
         return unlocked;
     }
 
+    public void SetUnlocked(bool value) {
+        unlocked = value;
+    }
+
     public bool IsSelected() {
         return selected;
     }

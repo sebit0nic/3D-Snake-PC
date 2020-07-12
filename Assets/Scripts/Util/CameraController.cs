@@ -20,34 +20,22 @@ public class CameraController : MonoBehaviour {
 
     private Vector3 v3To;
     private Quaternion qTo;
-    private CameraStatus cameraStatus;
     private bool stopped = false;
     private float currentUpDistance;
 
     private Quaternion targetRotation;
     private const float resumeDelay = 0.5f;
 
-    private WaitForSeconds resumeWaitForSeconds;
-
-    public void Init( CameraStatus cameraStatus ) {
-        this.cameraStatus = cameraStatus;
-        resumeWaitForSeconds = new WaitForSeconds( resumeDelay );
+    public void Init() {
         currentUpDistance = upDistance;
     }
 
     private void LateUpdate() {
         if( !stopped ) {
-            if( cameraStatus == CameraStatus.CAMERA_NO_ROTATION ) {
-                v3To = target.position - target.forward * backDistance + target.up * currentUpDistance;
-                transform.position = Vector3.Lerp( transform.position, v3To, trackingSpeed * Time.deltaTime );
-                qTo = Quaternion.LookRotation( target.position - transform.position, transform.up );
-                transform.localRotation = Quaternion.Slerp( transform.rotation, qTo, rotationSpeed * Time.deltaTime );
-            } else if( cameraStatus == CameraStatus.CAMERA_ROTATE ) {
-                v3To = target.position - target.forward * backDistance + target.up * currentUpDistance;
-                transform.position = Vector3.Lerp( transform.position, v3To, secondaryTrackingSpeed * Time.deltaTime );
-                qTo = Quaternion.LookRotation( target.position - transform.position, transform.forward );
-                transform.localRotation = Quaternion.Slerp( transform.rotation, qTo, secondaryRotationSpeed * Time.deltaTime );
-            }
+            v3To = target.position - target.forward * backDistance + target.up * currentUpDistance;
+            transform.position = Vector3.Lerp(transform.position, v3To, trackingSpeed * Time.deltaTime);
+            qTo = Quaternion.LookRotation(target.position - transform.position, transform.up);
+            transform.localRotation = Quaternion.Slerp(transform.rotation, qTo, rotationSpeed * Time.deltaTime);
         } else {
             transform.rotation = Quaternion.Slerp( transform.rotation, targetRotation, Time.deltaTime * panSpeed );
         }
@@ -56,27 +44,9 @@ public class CameraController : MonoBehaviour {
     /// <summary>
     /// Stop everything on game over.
     /// </summary>
-    public void Stop( bool stopForAd ) {
+    public void Stop() {
         targetRotation = Quaternion.LookRotation( Vector3.zero - transform.position, transform.up );
         stopped = true;
-
-        if( !stopForAd ) {
-            planet.SetRotating(true);
-        }
-    }
-
-    /// <summary>
-    /// Resume after player has watched ad to revive.
-    /// </summary>
-    public void Resume() {
-        StartCoroutine( WaitForResumeDelay() );
-    }
-
-    /// <summary>
-    /// Coroutine to wait a few seconds before resuming the camera.
-    /// </summary>
-    private IEnumerator WaitForResumeDelay() {
-        yield return resumeWaitForSeconds;
-        stopped = false;
+        planet.SetRotating(true);
     }
 }

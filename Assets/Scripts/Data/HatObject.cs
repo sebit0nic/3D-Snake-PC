@@ -21,6 +21,10 @@ public class HatObject {
         return unlocked;
     }
 
+    public void SetUnlocked(bool value) {
+        unlocked = value;
+    }
+
     public int GetPrice() {
         return price;
     }

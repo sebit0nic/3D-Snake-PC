@@ -13,36 +13,35 @@ public class SaveLoadManager : MonoBehaviour {
     public List<HatObject> standardHatObjects = new List<HatObject>();
     public List<ColorObject> standardColorObjects = new List<ColorObject>();
     public List<PowerupObject> standardPowerupObjects = new List<PowerupObject>();
-
-    private const string gameSavePath = "/gamesave.save";
+    
     private const string soundStatusKey = "SoundStatus";
     private const string tutorialStatusKey = "TutorialStatus";
     private const string lastRewardTimeKey = "LastRewardTime";
     private const string defaultLastRewardTime = "01.01.2000 00:00:00";
 
+    // PC only keys for PlayerPrefs
+    private const string saveFileExistsKey = "SaveFileExists";
+    private const string saveFileKey = "SaveFile";
+
     /// <summary>
     /// Save data persistently on device.
     /// </summary>
     public void SaveData( SavedData savedData ) {
-        BinaryFormatter bf = new BinaryFormatter();
-        FileStream file = File.Create( Application.persistentDataPath + gameSavePath );
-        bf.Serialize( file, savedData );
-        file.Close();
+        PlayerPrefs.SetInt(saveFileExistsKey, 1);
+
     }
 
     /// <summary>
     /// Load data from device or create new data if no save file exists yet.
     /// </summary>
     public SavedData LoadData() {
-        if( File.Exists( Application.persistentDataPath + gameSavePath ) ) {
-            BinaryFormatter bf = new BinaryFormatter();
-            FileStream file = File.Open( Application.persistentDataPath + gameSavePath, FileMode.Open );
-            SavedData savedData = (SavedData) bf.Deserialize( file );
-            file.Close();
+        if (PlayerPrefs.GetInt(saveFileExistsKey, 0) == 0) {
+            SavedData savedData = new SavedData(standardHatObjects, standardColorObjects, standardPowerupObjects);
+            SaveData(savedData);
             return savedData;
         } else {
-            SavedData savedData = new SavedData( standardHatObjects, standardColorObjects, standardPowerupObjects );
-            SaveData( savedData );
+            SavedData savedData = new SavedData(standardHatObjects, standardColorObjects, standardPowerupObjects);
+            savedData.ParseSavedString(PlayerPrefs.GetString(saveFileKey, ""));
             return savedData;
         }
     }
@@ -56,8 +55,7 @@ public class SaveLoadManager : MonoBehaviour {
     }
 
     public bool GetTutorialStatus() {
-        //return PlayerPrefs.GetInt( tutorialStatusKey, (int) TutorialStatus.TUTORIAL_OPEN ) != 0;
-        return false;
+        return PlayerPrefs.GetInt( tutorialStatusKey, (int) TutorialStatus.TUTORIAL_OPEN ) != 0;
     }
 
     public void SetTutorialStatus( int value ) {

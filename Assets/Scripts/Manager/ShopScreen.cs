@@ -65,7 +65,6 @@ public class ShopScreen : MonoBehaviour {
         hatPreviewModels[(int) savedData.GetSelectedHatType()].SetActive( true );
         shopSectionManager.PurchaseableSelected( selectedSectionIndex, (int) savedData.GetSelectedHatType() );
         ShowSection( 0 );
-        CheckAchievementConditions();
     }
 
     /// <summary>
@@ -184,7 +183,6 @@ public class ShopScreen : MonoBehaviour {
             StartCoroutine( OnShowTotalScoreAfterBuy( savedData.GetTotalScore(), savedData.GetTotalScore() - savedData.GetPurchaseablePrice( selectedSectionIndex, selectedPurchaseableIndex ) ) );
             savedData.UnlockPurchaseable( selectedSectionIndex, selectedPurchaseableIndex );
             PurchaseableObjectSelected( selectedPurchaseableIndex );
-            CheckAchievementConditions();
         }
         if( (ShopSection) selectedSectionIndex != ShopSection.POWERUPS ) {
             savedData.SelectPurchaseable( selectedSectionIndex, selectedPurchaseableIndex );
@@ -239,19 +237,6 @@ public class ShopScreen : MonoBehaviour {
     private void HideAllHatPreviewModels() {
         foreach( GameObject go in hatPreviewModels ) {
             go.SetActive( false );
-        }
-    }
-
-    /// <summary>
-    /// Check conditions of the achievements, maybe we unlocked something.
-    /// </summary>
-    private void CheckAchievementConditions() {
-        achievementManager.NotifyPurchaseableBought( savedData.GetPurchaseableBoughtCount() );
-        if( savedData.IsPowerupAtMaxLevel() ) {
-            achievementManager.NotifyPowerupAtMaxLevel();
-        }
-        if( savedData.IsEverythingUnlocked() ) {
-            achievementManager.NotifyEverythingUnlocked();
         }
     }
 
