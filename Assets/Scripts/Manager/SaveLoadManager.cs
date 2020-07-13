@@ -28,13 +28,15 @@ public class SaveLoadManager : MonoBehaviour {
     /// </summary>
     public void SaveData( SavedData savedData ) {
         PlayerPrefs.SetInt(saveFileExistsKey, 1);
-
+        PlayerPrefs.SetString(saveFileKey, savedData.CreateSavedString());
+        PlayerPrefs.Save();
     }
 
     /// <summary>
     /// Load data from device or create new data if no save file exists yet.
     /// </summary>
     public SavedData LoadData() {
+        PlayerPrefs.DeleteAll();
         if (PlayerPrefs.GetInt(saveFileExistsKey, 0) == 0) {
             SavedData savedData = new SavedData(standardHatObjects, standardColorObjects, standardPowerupObjects);
             SaveData(savedData);

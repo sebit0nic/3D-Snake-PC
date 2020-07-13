@@ -150,11 +150,30 @@ public class SavedData {
         return false;
     }
 
+    public string CreateSavedString() {
+        string savedString = "";
+        for (int i = 0; i < hatObjectList.Count; i++) {
+            savedString += "H" + i + ( hatObjectList[i].IsUnlocked() ? 1 : 0 ) + ";";
+        }
+
+        for (int i = 0; i < colorObjectList.Count; i++) {
+            savedString += "C" + i + ( colorObjectList[i].IsUnlocked() ? 1 : 0 ) + ";";
+        }
+
+        for (int i = 0; i < powerupObjectList.Count; i++) {
+            savedString += "P" + i + powerupObjectList[i].GetCurrentLevel() + ";";
+        }
+
+        savedString += "S" + highscore.ToString().PadLeft(3, '0') + ";";
+        savedString += "T" + totalScore.ToString().PadLeft(5, '0') + ";";
+        savedString += "A" + (int) currentHat + ";";
+        savedString += "O" + (int) currentColor + ";";
+        Debug.Log("Saved string: " + savedString);
+        return savedString;
+    }
+
     public void ParseSavedString(string savedString) {
-        // TODO: implement hat, color, powerup object parsing
-        // Example string: H01;H10;H20;H30;H40;H50;C01;C10;C20;C30;C40;C50;P00;P10;P20;S000;T00000;A0;O0;
         int index, value;
-        savedString = "H01;H10;H20;H30;H40;H50;C01;C10;C21;C30;C40;C51;P00;P10;P20;S100;T02000;A0;O0;";
         for (int i = 0; i < savedString.Length; i++) {
             switch ( savedString[i] ) {
                 case 'H':
@@ -164,7 +183,6 @@ public class SavedData {
                     value = int.Parse(savedString[i].ToString());
                     hatObjectList[index].SetUnlocked(value == 1 ? true : false);
                     i++;
-                    Debug.Log("Added hat at index <" + index + "> and value <" + value + "> now at position <" + i + ">");
                     break;
                 case 'C':
                     i++;
@@ -173,7 +191,6 @@ public class SavedData {
                     value = int.Parse(savedString[i].ToString());
                     colorObjectList[index].SetUnlocked(value == 1 ? true : false);
                     i++;
-                    Debug.Log("Added color at index <" + index + "> and value <" + value + "> now at position <" + i + ">");
                     break;
                 case 'P':
                     i++;
@@ -181,32 +198,29 @@ public class SavedData {
                     i++;
                     value = int.Parse(savedString[i].ToString());
                     powerupObjectList[index].SetCurrentLevel(value);
-                    Debug.Log("Added color at index <" + index + "> and value <" + value + "> now at position <" + i + ">");
                     break;
                 case 'S':
                     i++;
                     highscore = int.Parse(savedString.Substring(i, highscoreLength));
                     i += highscoreLength;
-                    Debug.Log("Added highscore <" + highscore + "> now at position <" + i + ">");
                     break;
                 case 'T':
                     i++;
                     totalScore = int.Parse(savedString.Substring(i, totalscoreLength));
                     i += totalscoreLength;
-                    Debug.Log("Added totalscore <" + totalScore + "> now at position <" + i + ">");
                     break;
                 case 'A':
                     i++;
                     currentHat = (PlayerHatTypes) int.Parse(savedString[i].ToString());
-                    Debug.Log("Added currentHat <" + currentHat.ToString() + "> now at position <" + i + ">");
                     break;
                 case 'O':
                     i++;
                     currentColor = (PlayerColorTypes) int.Parse(savedString[i].ToString());
-                    Debug.Log("Added currentColor <" + currentColor.ToString() + "> now at position <" + i + ">");
                     break;
             }
         }
+
+        Debug.Log("Loaded string: " + savedString);
     }
 
     public void SetTotalScore( int totalScore ) {
