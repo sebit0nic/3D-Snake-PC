@@ -9,7 +9,6 @@ using UnityEngine.UI;
 public class GuiManager : MonoBehaviour {
 
     public GameObject pauseButton, pauseMenu;
-    public GameObject steerRightButton, steerLeftButton;
     public GameObject gameOverScreen;
     public GameObject dailyPlayRewardNotification;
     public GameObject newHighscoreCrown;
@@ -84,8 +83,6 @@ public class GuiManager : MonoBehaviour {
     /// </summary>
     public void ToggleHUD( bool value ) {
         pauseButton.SetActive( value );
-        steerRightButton.SetActive( value );
-        steerLeftButton.SetActive( value );
         powerupIcon.gameObject.SetActive( value );
         powerupDurationImage.gameObject.SetActive( value );
         currentScoreText.gameObject.SetActive( value );
