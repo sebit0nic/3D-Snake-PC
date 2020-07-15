@@ -11,8 +11,7 @@ public class ScoreManager : MonoBehaviour {
     private int finalScore = 0;
     private int totalScore = 0;
     private bool newHighscore;
-
-    private const int minRevivalScore = 15;
+    
     private const int dailyPlayRewardScore = 100;
 
     public void Init( SavedData savedData ) {
@@ -60,10 +59,6 @@ public class ScoreManager : MonoBehaviour {
 
     public int GetTotalScore() {
         return totalScore;
-    }
-
-    public int GetMinRevivalScore() {
-        return minRevivalScore;
     }
 
     public bool IsNewHighscore() {

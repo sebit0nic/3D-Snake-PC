@@ -26,8 +26,6 @@ public class ShopScreen : MonoBehaviour {
     private SaveLoadManager saveLoadManager;
     private SavedData savedData;
     private StyleManager styleManager;
-    private PlayStoreManager playStoreManager;
-    private AchievementManager achievementManager;
     private SoundManager soundManager;
     private bool buyMode;
     private string totalScoreString;
@@ -51,9 +49,6 @@ public class ShopScreen : MonoBehaviour {
         shopSectionManager.Init( savedData );
         styleManager = GetComponentInChildren<StyleManager>();
         styleManager.Init( savedData );
-        playStoreManager = GetComponentInChildren<PlayStoreManager>();
-        playStoreManager.Init();
-        achievementManager = GetComponentInChildren<AchievementManager>();
         soundManager = GetComponentInChildren<SoundManager>();
         soundManager.Init( saveLoadManager );
         totalScoreWaitForFixedUpdate = new WaitForFixedUpdate();

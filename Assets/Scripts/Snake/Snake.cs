@@ -12,11 +12,6 @@ public class Snake : MonoBehaviour {
     private SnakeTailSpawner snakeTailSpawner;
     private SnakeHatChooser snakeHatChooser;
 
-    private const float waitToReviveDelay = 0.5f;
-    private const float reviveInvincibilityDuration = 3f;
-
-    private WaitForSeconds waitAfterResumeWaitForSeconds;
-
     [Header("Debug Settings")]
     public bool invincible = false;
 
@@ -30,8 +25,6 @@ public class Snake : MonoBehaviour {
         snakeCollision.Init( this );
         snakeTailSpawner.Init( this );
         snakeHatChooser.Init( GameManager.instance.GetSavedData() );
-
-        waitAfterResumeWaitForSeconds = new WaitForSeconds( waitToReviveDelay );
     }
 
     /// <summary>
@@ -92,30 +85,11 @@ public class Snake : MonoBehaviour {
         snakeTailSpawner.Stop();
     }
 
-    /// <summary>
-    /// Resume after player has watched ad to revive.
-    /// </summary>
-    public void Resume() {
-        StartCoroutine( WaitAfterResume() );
-    }
-
     public Transform GetCurrentPosition() {
         return snakeMovement.GetCurrentPosition();
     }
 
     public Transform GetLastTailTransform() {
         return snakeTailSpawner.GetLastTailTransform();
-    }
-
-    /// <summary>
-    /// Wait a few seconds after game over to resume.
-    /// </summary>
-    private IEnumerator WaitAfterResume() {
-        yield return waitAfterResumeWaitForSeconds;
-        snakeTailSpawner.InvincibilityPowerupActive( reviveInvincibilityDuration );
-        snakeCollision.InvincibilityPowerupActive( reviveInvincibilityDuration );
-        snakeMovement.Resume();
-        snakeCollision.Resume();
-        snakeTailSpawner.Resume();
     }
 }

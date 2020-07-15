@@ -150,6 +150,9 @@ public class SavedData {
         return false;
     }
 
+    /// <summary>
+    /// Prepare the save string for PlayerPrefs saving.
+    /// </summary>
     public string CreateSavedString() {
         string savedString = "";
         for (int i = 0; i < hatObjectList.Count; i++) {
@@ -164,14 +167,17 @@ public class SavedData {
             savedString += "P" + i + powerupObjectList[i].GetCurrentLevel() + ";";
         }
 
-        savedString += "S" + highscore.ToString().PadLeft(3, '0') + ";";
-        savedString += "T" + totalScore.ToString().PadLeft(5, '0') + ";";
+        savedString += "S" + highscore.ToString().PadLeft(highscoreLength, '0') + ";";
+        savedString += "T" + totalScore.ToString().PadLeft(totalscoreLength, '0') + ";";
         savedString += "A" + (int) currentHat + ";";
         savedString += "O" + (int) currentColor + ";";
         Debug.Log("Saved string: " + savedString);
         return savedString;
     }
 
+    /// <summary>
+    /// Parse the string from the PlayerPrefs saving and set the values accordingly.
+    /// </summary>
     public void ParseSavedString(string savedString) {
         int index, value;
         for (int i = 0; i < savedString.Length; i++) {

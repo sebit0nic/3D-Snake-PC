@@ -110,7 +110,7 @@ public class GameManager : MonoBehaviour {
     }
 
     /// <summary>
-    /// Snake touched tail, so do everything for game over (or ad placement).
+    /// Snake touched tail, so do everything for game over.
     /// </summary>
     public void PlayerTouchedTail() {
         fruitSpawner.Stop();

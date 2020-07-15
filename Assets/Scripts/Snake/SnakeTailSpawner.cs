@@ -111,24 +111,6 @@ public class SnakeTailSpawner : MonoBehaviour {
         StopAllCoroutines();
     }
 
-    /// <summary>
-    /// Resume after player has watched ad to revive.
-    /// </summary>
-    public void Resume() {
-        snakeThinAnimator.enabled = true;
-        CancelInvoke( spawnColliderKey );
-        CancelInvoke( popTailKey );
-        InvokeRepeating( spawnColliderKey, 0, tailRepeatFactor );
-        InvokeRepeating( popTailKey, 0, lifespan );
-        transform.localScale = Vector3.one;
-
-        snakeHeadLowerMeshRenderer.material.color = initialColor;
-        snakeHeadUpperRenderer.material.color = initialColor;
-        foreach( SnakeTail snakeTail in snakeTailList ) {
-            snakeTail.StartGameOverAnimation( initialColor );
-        }
-    }
-
     public bool IsThinPowerupEnabled() {
         return thinPowerupEnabled;
     }

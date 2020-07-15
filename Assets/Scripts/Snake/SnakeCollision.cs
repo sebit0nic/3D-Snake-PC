@@ -93,13 +93,6 @@ public class SnakeCollision : MonoBehaviour {
     }
 
     /// <summary>
-    /// Resume after player has watched ad to revive.
-    /// </summary>
-    public void Resume() {
-        stopped = false;
-    }
-
-    /// <summary>
     /// INVINCIBILITY powerup is active for the given duration.
     /// </summary>
     private IEnumerator WaitForInvincibilityPowerupDuration( float duration ) {

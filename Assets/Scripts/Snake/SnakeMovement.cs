@@ -17,8 +17,6 @@ public class SnakeMovement : MonoBehaviour {
 
     private Snake snake;
     private Rigidbody thisRigidbody;
-    private float steerMultiplier;
-    private bool leftDown, rightDown;
     private bool stopped = false;
     private RaycastHit downHit;
     private Vector3 surfaceNorm;
@@ -66,15 +64,6 @@ public class SnakeMovement : MonoBehaviour {
         stopped = true;
         transform.parent = planet.transform;
         instantiatedObjects.transform.parent = this.transform;
-    }
-
-    /// <summary>
-    /// Resume after player has watched ad to revive.
-    /// </summary>
-    public void Resume() {
-        stopped = false;
-        transform.parent = null;
-        instantiatedObjects.transform.parent = null;
     }
 
     public Transform GetCurrentPosition() {
